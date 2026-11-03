@@ -1,0 +1,55 @@
+# Atualiza o painel com os dados do SAPL todos os dias e publica no GitHub Pages.
+name: Atualizar painel
+
+on:
+  schedule:
+    - cron: "0 9 * * *"    # 06h de Brasília
+    - cron: "0 21 * * *"   # 18h de Brasília
+  workflow_dispatch:        # botão "Run workflow" para rodar na hora
+    inputs:
+      tudo:
+        description: "Revisar todas as matérias não concluídas (mais demorado)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizar-painel
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Desempacotar envio inicial (só na primeira vez)
+        run: |
+          if [ -f painel.zip ]; then unzip -o -q painel.zip && rm painel.zip && echo "Pacote inicial desempacotado"; fi
+
+      - name: Buscar novidades no SAPL
+        working-directory: coleta
+        run: python3 -u atualizar.py ${{ inputs.tudo && '--tudo' || '' }}
+
+      - name: Montar os dados do painel
+        working-directory: coleta
+        run: python3 -u processar.py
+
+      - name: Publicar
+        run: |
+          git config user.name  "painel-bot"
+          git config user.email "painel-bot@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Sem novidades hoje."
+          else
+            git commit -m "Atualização automática $(TZ=America/Recife date '+%d/%m/%Y %H:%M')"
+            git push
+          fi
