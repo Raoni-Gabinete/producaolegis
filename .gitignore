@@ -1,0 +1,5 @@
+.DS_Store
+coleta/coleta.log
+coleta/__pycache__/
+*.pyc
+coleta/atualizacao-teste.log
