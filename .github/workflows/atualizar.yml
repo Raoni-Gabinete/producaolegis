@@ -3,8 +3,8 @@ name: Atualizar painel
 
 on:
   schedule:
-    - cron: "0 9 * * *"    # 06h de Brasília
-    - cron: "0 21 * * *"   # 18h de Brasília
+    - cron: "0 9 * * 1-5"    # 06h de Brasília, segunda a sexta
+    - cron: "0 17 * * 1-5"   # 14h de Brasília, segunda a sexta (pega o que andou de manhã)
   workflow_dispatch:        # botão "Run workflow" para rodar na hora
     inputs:
       tudo:
