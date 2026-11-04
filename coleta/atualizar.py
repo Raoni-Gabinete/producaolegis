@@ -1,6 +1,6 @@
 """
 Painel Legislativo · Raoni Mendes
-Atualização incremental (roda todo dia, sozinha, pelo GitHub Actions).
+Atualização incremental (roda nos dias úteis às 06h e 14h, sozinha, pelo GitHub Actions).
 
 O que faz, em poucos minutos:
   1. Baixa de novo a lista de matérias e autorias do vereador (cerca de 24 consultas).
@@ -9,7 +9,7 @@ O que faz, em poucos minutos:
      - matérias cuja ficha foi alterada no SAPL (data_ultima_atualizacao);
      - matérias ainda em andamento que se moveram nos últimos 2 anos;
      - matérias apresentadas nos últimos 120 dias.
-  3. Aos domingos (ou com --tudo), revisa todas as que não foram concluídas, mesmo paradas há anos.
+  3. Na segunda-feira às 06h (ou com --tudo), revisa todas as que não foram concluídas, mesmo paradas há anos.
 
 Uso:  python3 atualizar.py   (depois: python3 processar.py)
 """
@@ -68,7 +68,9 @@ def main():
     materias = baixar_lista(f"materia/materialegislativa/?autores={AUTOR_ID}", "materias")
     baixar_lista(f"materia/autoria/?autor={AUTOR_ID}", "autorias")
 
-    revisao_semanal = hoje.weekday() == 6 or "--tudo" in sys.argv
+    # revisão completa na segunda-feira, na rodada das 06h (antes das 12h UTC)
+    agora_utc = dt.datetime.now(dt.timezone.utc)
+    revisao_semanal = (agora_utc.weekday() == 0 and agora_utc.hour < 12) or "--tudo" in sys.argv
     limite = (hoje - dt.timedelta(days=120)).isoformat()
     dois_anos = (hoje - dt.timedelta(days=730)).isoformat()
     alvo = []
