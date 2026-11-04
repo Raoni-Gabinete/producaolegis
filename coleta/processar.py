@@ -21,6 +21,8 @@ CACHE = os.path.join(AQUI, "cache")
 SAIDA = os.path.join(AQUI, "..", "dados", "materias.json")
 SAPL = "https://sapl.joaopessoa.pb.leg.br"
 AUTOR_ID = 102
+# horário de Brasília (o robô do GitHub roda em UTC)
+BRASILIA = __import__("datetime").timezone(__import__("datetime").timedelta(hours=-3))
 
 
 def carregar(nome):
@@ -332,7 +334,7 @@ def main():
     os.makedirs(os.path.dirname(SAIDA), exist_ok=True)
     datas = [x["ultima_mov"] for x in saida if x["ultima_mov"]]
     pacote = {
-        "atualizado_em": __import__("datetime").datetime.now().strftime("%Y-%m-%dT%H:%M"),
+        "atualizado_em": __import__("datetime").datetime.now(BRASILIA).isoformat(timespec="minutes"),
         "parlamentar": "Raoni Mendes",
         "fonte": SAPL,
         "total": resumo["total"],
