@@ -12,7 +12,7 @@ Painel público com toda a produção legislativa do vereador. Os dados vêm do 
 | `dados/materias.json` | Os mesmos dados, em JSON (reserva). |
 | `coleta/coletar.py` | Carga completa do SAPL para `coleta/cache/`, só na primeira vez. Se parar no meio, retoma de onde parou. |
 | `coleta/atualizar.py` | Atualização diária incremental: só o que pode ter mudado. |
-| `.github/workflows/atualizar.yml` | O robô que roda a atualização às 06h e 18h e publica. |
+| `.github/workflows/atualizar.yml` | O robô que roda a atualização às 06h e 14h, de segunda a sexta e publica. |
 | `CNAME` | Diz ao GitHub Pages que o endereço é `producaolegis.raonimendes.com.br`. |
 | `compartilhar.png`, `favicon.svg` | Imagem de prévia para WhatsApp e redes sociais, e o ícone da aba do navegador. |
 | `coleta/processar.py` | Transforma o cache nos arquivos de `dados/`: situação, tema, autor ou coautor e barra de evolução. |
@@ -21,7 +21,7 @@ Painel público com toda a produção legislativa do vereador. Os dados vêm do 
 
 **https://producaolegis.raonimendes.com.br**
 
-A página fica hospedada no **GitHub Pages**, que é gratuito. O **GitHub Actions** atualiza os dados sozinho, às **06h e 18h** (horário de Brasília). Ninguém precisa fazer nada no dia a dia.
+A página fica hospedada no **GitHub Pages**, que é gratuito. O **GitHub Actions** atualiza os dados sozinho, às **06h e 14h, de segunda a sexta** (horário de Brasília). Ninguém precisa fazer nada no dia a dia.
 
 ## Publicar pela primeira vez (uma vez só)
 
@@ -30,7 +30,7 @@ O passo a passo completo está em `PUBLICAR.md`.
 ## Como a atualização automática funciona
 
 1. `coleta/atualizar.py` baixa de novo a lista de matérias do vereador e busca a tramitação, os documentos e a relatoria das matérias que podem ter mudado: as novas, as alteradas no SAPL, as recentes e as ainda em andamento. São cerca de 45 por dia, e leva de 10 a 15 minutos.
-   - Aos domingos, ele revisa também as paradas há muito tempo.
+   - Na segunda-feira às 06h, ele revisa também as paradas há muito tempo.
 2. `coleta/processar.py` monta `dados/materias.js` e `dados/materias.json`.
 3. O robô salva as mudanças no repositório, e o GitHub Pages publica sozinho.
 

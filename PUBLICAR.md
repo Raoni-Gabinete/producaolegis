@@ -1,6 +1,6 @@
 # Publicar em producaolegis.raonimendes.com.br
 
-Passo a passo para fazer uma vez só. Depois disso, a página se atualiza sozinha às 06h e às 18h.
+Passo a passo para fazer uma vez só. Depois disso, a página se atualiza sozinha às 06h e às 14h, de segunda a sexta.
 
 **Como funciona:** o GitHub guarda os arquivos e publica a página (GitHub Pages). O robô do GitHub (Actions) consulta o SAPL duas vezes por dia. A Cloudflare, onde está o DNS de raonimendes.com.br, aponta o subdomínio para o GitHub. Tudo isso é gratuito.
 
@@ -95,7 +95,7 @@ Coloque o link **Produção Legislativa → https://producaolegis.raonimendes.co
 
 ## No dia a dia: nada
 
-A atualização roda sozinha às **06h e 18h**. Se uma execução falhar, por exemplo porque o SAPL ficou fora do ar, o GitHub manda um e-mail para a conta. A execução seguinte tenta de novo.
+A atualização roda sozinha às **06h e 14h, de segunda a sexta**. Se uma execução falhar, por exemplo porque o SAPL ficou fora do ar, o GitHub manda um e-mail para a conta. A execução seguinte tenta de novo.
 
 **Uma vez por semana (1 minuto, opcional):** abra **Actions** e veja se as últimas execuções estão verdes.
 
